@@ -5,16 +5,18 @@ socket.on('connect', function() {
 	console.log('Connected to server');
 
 	socket.on('newMessage', function(payload) {
+		let formattedTime = moment(payload.createdAt).format('h:mm a');
 		let li = $('<li></li>');
-		li.text(`${payload.from}: ${payload.text}`);
+		li.text(`${payload.from} ${formattedTime}: ${payload.text}`);
 		$('#messages').append(li);
 	});
 });
 
 socket.on('newLocationMessage', function(message) {
+	let formattedTime = moment(message.createdAt).format('h:mm a');
 	let li = $('<li></li>');
 	let a = $('<a target="_blank">My Current Location</a>');
-	li.text(`${message.from}: `);
+	li.text(`${message.from}  ${formattedTime}: `);
 	a.attr('href', message.url);
 	li.append(a);
 	$('#messages').append(li);
@@ -27,7 +29,7 @@ $('#message-form').on('submit', function(e) {
 		from: 'User',
 		text: messageTextbox.val(),
 	}, function() {
-		$messageTextbox.val('');
+		messageTextbox.val('');
 	});
 });
 
