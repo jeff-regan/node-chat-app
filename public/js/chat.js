@@ -1,6 +1,22 @@
 'use strict;'
 
 var socket = io();
+
+function scrollToBottom() {
+	// Selectors
+	const messages = $('#messages');
+	// Heights
+	let clientHeight = messages.prop('clientHeight');
+	let scrollTop = messages.prop('scrollTop');
+	let scrollHeight = messages.prop('scrollHeight');
+	let newMessageHeight = $('#messages li').last().height();
+	let lastMessageHeight = $('#messages li:nth-last-child(2)').height();
+
+	if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+		messages.scrollTop(scrollHeight);
+	}
+}
+
 socket.on('connect', function() {
 	console.log('Connected to server');
 
@@ -14,6 +30,7 @@ socket.on('connect', function() {
 		});
 
 		$('#messages').append(html);
+		scrollToBottom();
 	});
 });
 
@@ -27,6 +44,7 @@ socket.on('newLocationMessage', function(message) {
 	});
 
 	$('#messages').append(html);
+	scrollToBottom();
 });
 
 $('#message-form').on('submit', function(e) {
@@ -40,15 +58,15 @@ $('#message-form').on('submit', function(e) {
 	});
 });
 
-let locationButton = $('#send-location');
-let locationButtonLabel = locationButton.text();
+const locationButton = $('#send-location');
+const locationButtonLabel = locationButton.text();
 
 locationButton.on('click', function(e) {
+
 	e.preventDefault();
 	if (!navigator.geolocation) {
 		return alert('Geolocation not supported by your browser.');
 	}
-
 	locationButton.attr('disabled', 'disabled').text('Sending location...');
 	navigator.geolocation.getCurrentPosition(
 		function(position) {
