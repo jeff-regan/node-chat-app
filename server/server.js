@@ -19,7 +19,6 @@ var users = new Users();
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
-
 	socket.on('join', (params, callback) => {
 		if (!isRealString(params.name) || !isRealString(params.room)) {
 			return callback('Name and room name are required');
@@ -37,6 +36,7 @@ io.on('connection', (socket) => {
 
 	socket.on('createMessage', (message,  callback) => {
 		const user = users.getUser(socket.id);
+
 		if (user && isRealString(message.text)) {
 			io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
 		}
