@@ -12,7 +12,7 @@ const generateLocationMessage = (from, latitude, longitude) => {
 	return {
 		from,
 		url: `https://www.google.com/maps?q=${latitude},${longitude}`,
-		createdAt: new moment().valueOf(),
+    createdAt: moment().valueOf()
 	};
 };
 
