@@ -9,8 +9,8 @@ function scrollToBottom() {
 	let clientHeight = messages.prop('clientHeight');
 	let scrollTop = messages.prop('scrollTop');
 	let scrollHeight = messages.prop('scrollHeight');
-	let newMessageHeight = $('#messages li').last().height();
-	let lastMessageHeight = $('#messages li:nth-last-child(2)').height();
+	let newMessageHeight = $('#messages li').last().innerHeight();
+	let lastMessageHeight = $('#messages li:nth-last-child(2)').innerHeight();
 
 	if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
 		messages.scrollTop(scrollHeight);
@@ -53,10 +53,10 @@ socket.on('newMessage', function(message) {
 socket.on('newLocationMessage', function(message) {
 	let formattedTime = moment(message.createdAt).format('h:mm a');
 	let template = $('#location-message-template').html();
-	let html = Mustache.render(template, {
-		url: message.url,
-		from: message.from,
-		createdAt: formattedTime,
+  var html = Mustache.render(template, {
+    from: message.from,
+    url: message.url,
+    createdAt: formattedTime
 	});
 
 	$('#messages').append(html);
